@@ -19,8 +19,6 @@ print.assay<-function(assay,plate=1){
 #' @export
 plot.assay<-function(assay,plate=1,type="R"){
   rotate <- function(x) t(apply(x, 2, rev)) # Helper method to put rows back horizontally and columns vertically
-  require(lattice)
-  require(RColorBrewer)
   theme <- custom.theme(region=rev(brewer.pal(n=11, 'RdBu'))) # Custom red/blue theme
   if(type=="R")
     levelplot(rotate(assay$m[,,plate]),xlab="Columns",ylab="Rows",main=paste("Plate",plate,"raw measurements"),par.settings=theme,margin=F,pretty=T,scales=list(x=list(alternating=2,tck=c(0,0)),y=list(tck=c(0,0))))
