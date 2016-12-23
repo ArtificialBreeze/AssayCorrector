@@ -1,4 +1,5 @@
 # AssayCorrector
+[![Build Status](https://travis-ci.org/ArtificialBreeze/AssayCorrector.svg?branch=master)](https://travis-ci.org/ArtificialBreeze/AssayCorrector)
 ### Description
 This package uses partial mean polish and non-parametric statistical procedures to identify and correct spatial bias present in high-thoughput screening assays.
 ### Installation
