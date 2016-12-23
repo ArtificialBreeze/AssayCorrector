@@ -4,7 +4,7 @@
 \alias{print.assay}
 \title{Print assay summary}
 \usage{
-\method{print}{assay}(assay, plate = 1)
+print(assay,plate=2)
 }
 \arguments{
 \item{assay}{The assay you want to print}

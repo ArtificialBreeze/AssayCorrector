@@ -3,6 +3,7 @@
 #' @description \code{print.assay} simply prints a summary of the HTS assay
 #' @param assay The assay you want to print
 #' @param plate The plate number
+#' @usage print(assay,plate=2)
 #' @export
 print.assay<-function(assay,plate=1){
   cat("HTS assay (",dim(assay$m)[1],"rows x ",dim(assay$m)[2],"columns x ",dim(assay$m)[3]," plates):\nPlate ",plate,"\n")
@@ -30,17 +31,33 @@ plot.assay<-function(assay,plate=1,type="R"){
     stop("Error. Check your assay")
 }
 #' @title Create a new \code{assay}
-#' @description \code{create} makes a new object of class assay. You should pass this object to detect() and correct() methods
+#' @description \code{create_assay} makes a new object of class assay. You should pass this object to \code{detect_bias()} and \code{correct_bias()} methods
 #' @param m The assay you want to be corrected
 #' @param ctrl An optional boolean array of the same dimensions as \code{m}. Each entry is 1 if the well is a control well, 0 otherwise. All control wells are excluded from all computations
+#' @return assay The created assay object.
+#' It containts the following fields:
+#'
+#' \code{n} The HTS matrix of raw measurements
+#'
+#' \code{ctrl} The binary matrix of control wells
+#'
+#' \code{biasPositions} The binary matrix where 1:well is biased, 0:well is unbiased, as suggested by Mann-Whitney test
+#'
+#' \code{mCorrected} The HTS matrix of corrected measurements, initilized to a zero array, and subsequently storing the corrected version of \code{m} via \code{correct_bias()}
+#'
+#' \code{biasType} Vector of length p, where p is the number of plates. It tell, for each plate of the assay, A:Additive trend, M:Multiplicative trend, U:Undetermined trend and C:Error-free plate.
 #' @examples
-#' m=array(20,c(8,12,5)) # Create array of 20s, 8 rows, 12 columns, 5 plates
-#' m[1:5,12,]=40 # Introduce spatial bias in last column
-#' m=m+rnorm(8*12*5) # Add random additive noise
-#' assay=create(m)
-#' @usage assay=create(m)
+#' # Fictive 8x12x5 assay
+#' m<-readRDS(gzcon(url(
+#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
+#' assay<-create_assay(m)
+#' # Plate 7 taken from Carralot et al. 2012
+#' m<-readRDS(gzcon(url(
+#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/Plate7_raw.Rda?raw=true')))
+#' assay<-create_assay(m)
+#' @usage assay<-create_assay(m,ctrl=NA)
 #' @export
-create<-function(m,ctrl=NA){
+create_assay<-function(m,ctrl=NA){
   if(is.na(ctrl)){ # If no control pattern supplied, assuming none
     ctrl=m
     ctrl[,,]=0
@@ -67,14 +84,15 @@ create<-function(m,ctrl=NA){
   return(assay)
 }
 #' @title Detect the type of bias present in the assay
-#' @description \code{detect} implements both the additive and multiplicative PMP methods
+#' @description \code{detect}  (1) identifies rows and columns of all plates of the assay affected by spatial bias (following the results of the Mann-Whitney U test); (2) identifies well locations (i.e., well positions scanned across all plates of a given assay) affected by spatial bias (also following the results of the Mann-Whitney U test).
 #' @param assay The assay to be corrected. Has to be an \code{assay} object.
 #' @param alpha Significance level threshold (defaults to 0.05)
 #' @param type \code{P}:plate-specific, \code{A}:assay-specific, \code{PA}:plate then assay-specific, \code{AP}:assay then plate-specific
+#' @examples detected<-detect_bias(assay)
 #' @return The corrected assay (\code{assay} object)
-#' @usage detect(assay,method=1,alpha=0.01,type="P")
+#' @usage detect_bias(assay,alpha=0.01,type="P")
 #' @export
-detect<-function(assay,method=1,alpha=0.05,type="PA"){
+detect_bias<-function(assay,alpha=0.01,type="PA"){
   m=assay$m
   ctrl=assay$ctrl
   biasType=assay$biasType
@@ -107,6 +125,10 @@ detect<-function(assay,method=1,alpha=0.05,type="PA"){
     biased.additive=unlist(biased.additive)
     biased.multiplicative=unlist(biased.multiplicative)
     unbiased=unlist(unbiased)
+    if(length(biased.multiplicative)*length(biased.additive)==0){ # 100% unbiased
+        biasType[k]='C'
+        next
+      }
     pvalue.additive=ks.test(biased.additive,unbiased)$p.value
     pvalue.multiplicative=ks.test(biased.multiplicative,unbiased)$p.value
     if(pvalue.additive > alpha & pvalue.multiplicative < alpha) # aPMP did better
@@ -121,16 +143,17 @@ detect<-function(assay,method=1,alpha=0.05,type="PA"){
   assay$biasType=biasType # Write the resulting vector back
   return(assay)
 }
-#' @title Correct the bias present in the assay, previously detected by the \code{detect} method
-#' @description \code{correct} uses either the additive and multiplicative PMP methods to correct the assay measurements
+#' @title Correct the bias present in the assay, previously detected by the \code{detect_bias()} method
+#' @description \code{correct_bias()} (1) uses either the additive or multiplicative PMP (Partial Mean Polish) methods (the most appropriate spatial bias model can be either specified or determined by the program following the results of the Kolmogorov-Smirnov two-sample test) to correct the assay measurements if the plate-specific correction is specified; (2) carries out the assay-specific correction if specified.
 #' @param assay The assay to be corrected. Has to be an \code{assay} object.
 #' @param method \code{NULL}:autodetect (default), \code{1}:additive, \code{2}:multiplicative
 #' @param alpha Significance level threshold (defaults to 0.05)
 #' @param type \code{P}:plate-specific, \code{A}:assay-specific, \code{PA}:plate then assay-specific, \code{AP}:assay then plate-specific
 #' @return The corrected assay (\code{assay} object)
-#' @usage correct(assay,method=NULL,alpha=0.05,type="PA")
+#' @examples corrected<-correct_bias(detected,method=2)
+#' @usage correct_bias(assay,method=NULL,alpha=0.05,type="PA")
 #' @export
-correct<-function(assay,method=NULL,alpha=0.05,type="PA"){
+correct_bias<-function(assay,method=NULL,alpha=0.05,type="PA"){
   m=assay$m
   ctrl=assay$ctrl
   biasType=assay$biasType

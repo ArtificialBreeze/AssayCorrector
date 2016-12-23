@@ -1,9 +1,9 @@
 Package: AssayCorrector
 Type: Package
 Title: Bias elimination in screening technologies assays
-Version: 1.0.1
+Version: 1.1.1
 Date: 2016-12-23
-Author: Bogdan Mazoure
+Author: Bogdan Mazoure (McGill University, Department of Computer Science), Iurie Caraus (UQAM, Departement d'Informatique), Robert Nadon (McGill University, Department of Human Genetics and Genome Quebec Innovation Center) and Vladimir Makarenkov (UQAM, Departement d'Informatique)
 Maintainer: <bogdan.mazoure@gmail.com>
 Description: Eliminates both multiplicative and additive types of bias using
     partial mean polish. Using the Kolmogorov-Smirnov test, it can automatically detect the bias type (either additive or multiplicative). It
