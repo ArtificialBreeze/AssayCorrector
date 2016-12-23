@@ -158,6 +158,7 @@ detect_bias<-function(assay,alpha=0.01,type="PA"){
 #' m<-readRDS(gzcon(url(
 #' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
 #' assay<-create_assay(m)
+#' detected<-detect_bias(assay)
 #' corrected<-correct_bias(detected,method=2)
 #' @usage correct_bias(assay,method=NULL,alpha=0.05,type="PA")
 #' @export
