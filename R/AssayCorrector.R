@@ -88,7 +88,11 @@ create_assay<-function(m,ctrl=NA){
 #' @param assay The assay to be corrected. Has to be an \code{assay} object.
 #' @param alpha Significance level threshold (defaults to 0.05)
 #' @param type \code{P}:plate-specific, \code{A}:assay-specific, \code{PA}:plate then assay-specific, \code{AP}:assay then plate-specific
-#' @examples detected<-detect_bias(assay)
+#' @examples
+#' m<-readRDS(gzcon(url(
+#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
+#' assay<-create_assay(m)
+#' detected<-detect_bias(assay)
 #' @return The corrected assay (\code{assay} object)
 #' @usage detect_bias(assay,alpha=0.01,type="P")
 #' @export
@@ -150,7 +154,11 @@ detect_bias<-function(assay,alpha=0.01,type="PA"){
 #' @param alpha Significance level threshold (defaults to 0.05)
 #' @param type \code{P}:plate-specific, \code{A}:assay-specific, \code{PA}:plate then assay-specific, \code{AP}:assay then plate-specific
 #' @return The corrected assay (\code{assay} object)
-#' @examples corrected<-correct_bias(detected,method=2)
+#' @examples
+#' m<-readRDS(gzcon(url(
+#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
+#' assay<-create_assay(m)
+#' corrected<-correct_bias(detected,method=2)
 #' @usage correct_bias(assay,method=NULL,alpha=0.05,type="PA")
 #' @export
 correct_bias<-function(assay,method=NULL,alpha=0.05,type="PA"){
