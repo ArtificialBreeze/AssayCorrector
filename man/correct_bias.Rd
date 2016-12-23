@@ -25,6 +25,7 @@ The corrected assay (\code{assay} object)
 m<-readRDS(gzcon(url(
 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
 assay<-create_assay(m)
+detected<-detect_bias(assay)
 corrected<-correct_bias(detected,method=2)
 }
 
