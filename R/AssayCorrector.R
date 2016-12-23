@@ -60,7 +60,7 @@ plot.assay<-function(assay,plate=1,type="R"){
 create_assay<-function(m,ctrl=NA){
   if(is.na(ctrl)){ # If no control pattern supplied, assuming none
     ctrl=m
-    ctrl[,,]=0
+    ctrl[]=0
   }
   if(any(!(ctrl%in%0:1))) # If non zero/one values detected
     stop("Control array must be binary")
