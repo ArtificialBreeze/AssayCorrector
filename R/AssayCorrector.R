@@ -128,7 +128,7 @@ detect<-function(assay,method=1,alpha=0.05,type="PA"){
 #' @param alpha Significance level threshold (defaults to 0.05)
 #' @param type \code{P}:plate-specific, \code{A}:assay-specific, \code{PA}:plate then assay-specific, \code{AP}:assay then plate-specific
 #' @return The corrected assay (\code{assay} object)
-#' @usage correct(assay,method=NULL,alpha=0.01,type="PA")
+#' @usage correct(assay,method=NULL,alpha=0.05,type="PA")
 #' @export
 correct<-function(assay,method=NULL,alpha=0.05,type="PA"){
   m=assay$m
