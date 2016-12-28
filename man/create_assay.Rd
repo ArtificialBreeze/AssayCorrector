@@ -30,12 +30,8 @@ It containts the following fields:
 }
 \examples{
 # Fictive 8x12x5 assay
-m<-readRDS(gzcon(url(
-'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
 assay<-create_assay(m)
 # Plate 7 taken from Carralot et al. 2012
-m<-readRDS(gzcon(url(
-'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/Plate7_raw.Rda?raw=true')))
-assay<-create_assay(m)
+assay<-create_assay(plate7)
 }
 

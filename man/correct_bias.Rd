@@ -22,8 +22,6 @@ The corrected assay (\code{assay} object)
 \code{correct_bias()} (1) uses either the additive or multiplicative PMP (Partial Mean Polish) methods (the most appropriate spatial bias model can be either specified or determined by the program following the results of the Kolmogorov-Smirnov two-sample test) to correct the assay measurements if the plate-specific correction is specified; (2) carries out the assay-specific correction if specified.
 }
 \examples{
-m<-readRDS(gzcon(url(
-'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
 assay<-create_assay(m)
 detected<-detect_bias(assay)
 corrected<-correct_bias(detected,method=2)

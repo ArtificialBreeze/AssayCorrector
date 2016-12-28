@@ -56,10 +56,8 @@ plot.assay<-function(x,...,plate=1,type="R"){
 #' \code{biasType} Vector of length p, where p is the number of plates. It tell, for each plate of the assay, A:Additive trend, M:Multiplicative trend, U:Undetermined trend and C:Error-free plate.
 #' @examples
 #' # Fictive 8x12x5 assay
-#' load('data/m.rda')
 #' assay<-create_assay(m)
 #' # Plate 7 taken from Carralot et al. 2012
-#' load('data/plate7.rda')
 #' assay<-create_assay(plate7)
 #' @export
 create_assay<-function(m,ctrl=NA){
@@ -96,8 +94,6 @@ create_assay<-function(m,ctrl=NA){
 #' @param alpha Significance level threshold (defaults to 0.05)
 #' @param type \code{P}:plate-specific, \code{A}:assay-specific, \code{PA}:plate then assay-specific, \code{AP}:assay then plate-specific
 #' @examples
-#' m<-readRDS(gzcon(url(
-#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
 #' assay<-create_assay(m)
 #' detected<-detect_bias(assay)
 #' @return The corrected assay (\code{assay} object)
@@ -163,8 +159,6 @@ detect_bias<-function(assay,alpha=0.01,type="P"){
 #' @param type \code{P}:plate-specific, \code{A}:assay-specific, \code{PA}:plate then assay-specific, \code{AP}:assay then plate-specific
 #' @return The corrected assay (\code{assay} object)
 #' @examples
-#' m<-readRDS(gzcon(url(
-#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
 #' assay<-create_assay(m)
 #' detected<-detect_bias(assay)
 #' corrected<-correct_bias(detected,method=2)

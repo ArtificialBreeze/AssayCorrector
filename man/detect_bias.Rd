@@ -20,8 +20,6 @@ The corrected assay (\code{assay} object)
 \code{detect}  (1) identifies rows and columns of all plates of the assay affected by spatial bias (following the results of the Mann-Whitney U test); (2) identifies well locations (i.e., well positions scanned across all plates of a given assay) affected by spatial bias (also following the results of the Mann-Whitney U test).
 }
 \examples{
-m<-readRDS(gzcon(url(
-'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
 assay<-create_assay(m)
 detected<-detect_bias(assay)
 }
