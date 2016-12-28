@@ -4,7 +4,7 @@
 \alias{correct_bias}
 \title{Correct the bias present in the assay, previously detected by the \code{detect_bias()} method}
 \usage{
-correct_bias(assay,method=NULL,alpha=0.05,type="PA")
+correct_bias(assay, method = NULL, alpha = 0.05, type = "PA")
 }
 \arguments{
 \item{assay}{The assay to be corrected. Has to be an \code{assay} object.}

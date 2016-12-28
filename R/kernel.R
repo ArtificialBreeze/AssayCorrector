@@ -3,18 +3,6 @@ PMP_MAX_ITERATIONS = 1000
 THRESHOLD=2.5
 .zify=function(m)(m-mean(m))/ifelse(!sd(m),PMP_EPSILON,sd(m))
 .rify=function(m)(m-median(m))/ifelse(!mad(m),PMP_EPSILON,mad(m))
-#' Partial mean polish (PMP) algorithm
-#'
-#' This function implements both the additive and multiplicative PMP methods
-#' @param m The assay to be cleaned. Has to be an \code{array} object.
-#' @param ctrl An optional boolean array of the same dimensions as \code{m}. Each entry is 1 if the well is a control well, 0 otherwise. All control wells are excluded from all computations
-#' @param method Pass 1 for additive, 2 for multiplicative type of bias
-#' @param alpha Significance level threshold (defaults to 0.05)
-#' @return The corrected assay (\code{array} object)
-#' @examples
-#' m=array(5,dim=c(2,2,2))
-#' ctrl=m;ctrl[,,]=m
-#' m.cleaned=PMP(m[,,1],ctrl[,,1],1,0.01)
 .PMP=function(m,ctrl,method,alpha=0.05){
   bak=m
   ctrl[is.na(ctrl)] <- 1 # All missing controls and reals are excluded (flagged as control wells)
@@ -305,7 +293,6 @@ THRESHOLD=2.5
   Loop=0
   n=0
   ctrlS=sum(ctrl)
-  assay.errors<<-CFlag
   CFlag=rep(TRUE,Columns) # AD HOC
   if(!sum(CFlag))return(raw.bak) # If no errors, return non normalized matrix
   if(Depth>1){

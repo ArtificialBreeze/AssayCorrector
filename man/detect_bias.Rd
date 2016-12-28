@@ -4,7 +4,7 @@
 \alias{detect_bias}
 \title{Detect the type of bias present in the assay}
 \usage{
-detect_bias(assay,alpha=0.01,type="P")
+detect_bias(assay, alpha = 0.01, type = "P")
 }
 \arguments{
 \item{assay}{The assay to be corrected. Has to be an \code{assay} object.}

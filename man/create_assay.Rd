@@ -4,7 +4,7 @@
 \alias{create_assay}
 \title{Create a new \code{assay}}
 \usage{
-assay<-create_assay(m,ctrl=NA)
+create_assay(m, ctrl = NA)
 }
 \arguments{
 \item{m}{The assay you want to be corrected}

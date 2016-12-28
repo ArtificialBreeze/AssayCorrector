@@ -4,14 +4,19 @@
 \alias{plot.assay}
 \title{Plot assay plate-wise}
 \usage{
-plot(assay,plate=2,type="P")
+\method{plot}{assay}(x, ..., plate = 1, type = "R")
 }
 \arguments{
-\item{assay}{The assay you want to plot}
+\item{x}{The assay you want to plot}
 
-\item{plate}{The plate number}
+\item{...}{Ellipsis to be passed to the \code{levelplotplot()} function from the \code{lattice} package}
+
+\item{plate}{The plate number (Default:1)}
 
 \item{type}{Either "R" - raw assay, "C" - corrected assay (if it exists) or "P" - spatial bias position}
+}
+\value{
+None
 }
 \description{
 \code{plot.assay} plots a hit map of the assay (only one plate at a time)

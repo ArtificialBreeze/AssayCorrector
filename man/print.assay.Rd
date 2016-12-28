@@ -4,12 +4,17 @@
 \alias{print.assay}
 \title{Print assay summary}
 \usage{
-print(assay,plate=2)
+\method{print}{assay}(x, ..., plate = 1)
 }
 \arguments{
-\item{assay}{The assay you want to print}
+\item{x}{The assay you want to print}
 
-\item{plate}{The plate number}
+\item{...}{Ellipsis to be passed to the default \code{print()} function}
+
+\item{plate}{The plate number (Default:1)}
+}
+\value{
+None
 }
 \description{
 \code{print.assay} simply prints a summary of the HTS assay

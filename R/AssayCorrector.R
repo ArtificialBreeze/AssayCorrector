@@ -1,32 +1,40 @@
 #' @title Print assay summary
 #' @method print assay
 #' @description \code{print.assay} simply prints a summary of the HTS assay
-#' @param assay The assay you want to print
-#' @param plate The plate number
-#' @usage print(assay,plate=2)
+#' @param x The assay you want to print
+#' @param plate The plate number (Default:1)
+#' @param ... Ellipsis to be passed to the default \code{print()} function
+#' @return None
 #' @export
-print.assay<-function(assay,plate=1){
+print.assay<-function(x,...,plate=1){
+  assay=x
+  if(class(assay)!="assay")
+    stop("Error: x is not an assay.")
   cat("HTS assay (",dim(assay$m)[1],"rows x ",dim(assay$m)[2],"columns x ",dim(assay$m)[3]," plates):\nPlate ",plate,"\n")
-  print(assay$m[,,plate]) # Print first plate raw measurements
+  print(assay$m[,,plate],...) # Print first plate raw measurements
   cat("Minimum value: ",min(assay$m)," Maximum value: ",max(assay$m))
 }
 #' @title Plot assay plate-wise
 #' @method plot assay
 #' @description  \code{plot.assay} plots a hit map of the assay (only one plate at a time)
-#' @param assay The assay you want to plot
-#' @param plate The plate number
+#' @param x The assay you want to plot
+#' @param plate The plate number (Default:1)
 #' @param type Either "R" - raw assay, "C" - corrected assay (if it exists) or "P" - spatial bias position
-#' @usage plot(assay,plate=2,type="P")
+#' @param ... Ellipsis to be passed to the \code{levelplotplot()} function from the \code{lattice} package
+#' @return None
 #' @export
-plot.assay<-function(assay,plate=1,type="R"){
+plot.assay<-function(x,...,plate=1,type="R"){
+  assay=x
+  if(class(assay)!="assay")
+    stop("Error: x is not an assay.")
   rotate <- function(x) t(apply(x, 2, rev)) # Helper method to put rows back horizontally and columns vertically
-  theme <- custom.theme(region=rev(brewer.pal(n=11, 'RdBu'))) # Custom red/blue theme
+  theme <- latticeExtra::custom.theme(region=rev(brewer.pal(n=11, 'RdBu'))) # Custom red/blue theme
   if(type=="R")
-    levelplot(rotate(assay$m[,,plate]),xlab="Columns",ylab="Rows",main=paste("Plate",plate,"raw measurements"),par.settings=theme,margin=F,pretty=T,scales=list(x=list(alternating=2,tck=c(0,0)),y=list(tck=c(0,0))))
+    lattice::levelplot(rotate(assay$m[,,plate]),xlab="Columns",ylab="Rows",main=paste("Plate",plate,"raw measurements"),par.settings=theme,margin=F,pretty=T,scales=list(x=list(alternating=2,tck=c(0,0)),y=list(tck=c(0,0))),...)
   else if(type=="C" & 'mCorrected'%in%names(assay))
-    levelplot(rotate(assay$mCorrected[,,plate]),xlab="Columns",ylab="Rows",main=paste("Plate",plate,"raw measurements"),par.settings=theme,margin=F,pretty=T,scales=list(x=list(alternating=2,tck=c(0,0)),y=list(tck=c(0,0))))
+    lattice::levelplot(rotate(assay$mCorrected[,,plate]),xlab="Columns",ylab="Rows",main=paste("Plate",plate,"raw measurements"),par.settings=theme,margin=F,pretty=T,scales=list(x=list(alternating=2,tck=c(0,0)),y=list(tck=c(0,0))),...)
   else  if(type=="P")
-    levelplot(rotate(assay$biasPositions[,,plate]),xlab="Columns",ylab="Rows",main=paste("Plate",plate,"raw measurements"),par.settings=theme,margin=F,pretty=T,scales=list(x=list(alternating=2,tck=c(0,0)),y=list(tck=c(0,0))))
+    lattice::levelplot(rotate(assay$biasPositions[,,plate]),xlab="Columns",ylab="Rows",main=paste("Plate",plate,"raw measurements"),par.settings=theme,margin=F,pretty=T,scales=list(x=list(alternating=2,tck=c(0,0)),y=list(tck=c(0,0))),...)
   else
     stop("Error. Check your assay")
 }
@@ -48,16 +56,15 @@ plot.assay<-function(assay,plate=1,type="R"){
 #' \code{biasType} Vector of length p, where p is the number of plates. It tell, for each plate of the assay, A:Additive trend, M:Multiplicative trend, U:Undetermined trend and C:Error-free plate.
 #' @examples
 #' # Fictive 8x12x5 assay
-#' m<-readRDS(gzcon(url(
-#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true')))
+#' load('data/m.rda')
 #' assay<-create_assay(m)
 #' # Plate 7 taken from Carralot et al. 2012
-#' m<-readRDS(gzcon(url(
-#' 'https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/Plate7_raw.Rda?raw=true')))
-#' assay<-create_assay(m)
-#' @usage assay<-create_assay(m,ctrl=NA)
+#' load('data/plate7.rda')
+#' assay<-create_assay(plate7)
 #' @export
 create_assay<-function(m,ctrl=NA){
+  if(!(class(m) %in% c("array","matrix")))
+    stop("Error: m is not an array.")
   if(is.na(ctrl)){ # If no control pattern supplied, assuming none
     ctrl=m
     ctrl[]=0
@@ -94,9 +101,10 @@ create_assay<-function(m,ctrl=NA){
 #' assay<-create_assay(m)
 #' detected<-detect_bias(assay)
 #' @return The corrected assay (\code{assay} object)
-#' @usage detect_bias(assay,alpha=0.01,type="P")
 #' @export
-detect_bias<-function(assay,alpha=0.01,type="PA"){
+detect_bias<-function(assay,alpha=0.01,type="P"){
+  if(class(assay)!="assay")
+    stop("Error: This is not an assay.")
   m=assay$m
   ctrl=assay$ctrl
   biasType=assay$biasType
@@ -160,9 +168,10 @@ detect_bias<-function(assay,alpha=0.01,type="PA"){
 #' assay<-create_assay(m)
 #' detected<-detect_bias(assay)
 #' corrected<-correct_bias(detected,method=2)
-#' @usage correct_bias(assay,method=NULL,alpha=0.05,type="PA")
 #' @export
 correct_bias<-function(assay,method=NULL,alpha=0.05,type="PA"){
+  if(class(assay)!="assay")
+    stop("Error: This is not an assay.")
   m=assay$m
   ctrl=assay$ctrl
   biasType=assay$biasType
