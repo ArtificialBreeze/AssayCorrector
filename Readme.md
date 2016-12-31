@@ -11,7 +11,11 @@ devtools::install_github('ArtificialBreeze/AssayCorrector')
 ### Usage
 First, an ```assay``` object should be created by using 
 ```{r }
-assay<-m<-readRDS(gzcon(url('https://github.com/ArtificialBreeze/AssayCorrector/blob/master/examples/8x12_raw.Rda?raw=true'))) # Using a pre-generate example
+library(AssayCorrector)
+# Fictive 8x12x5 assay
+assay<-create_assay(m)
+# Plate 7 taken from Carralot et al. 2012
+assay<-create_assay(plate7)
 ```
 Next, we can detect and correct the bias as follows:
 ```{r }
