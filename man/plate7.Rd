@@ -13,4 +13,3 @@ The seventh plate take from an experimental assay, which showed the evidence of 
 kind of bias in screening technologies.
 }
 \keyword{datasets}
-

@@ -26,4 +26,3 @@ assay<-create_assay(m)
 detected<-detect_bias(assay)
 corrected<-correct_bias(detected,method=2)
 }
-
