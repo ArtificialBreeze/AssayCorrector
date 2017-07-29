@@ -27,7 +27,7 @@ It containts the following fields:
 
 \code{biasModel} Vector of length p, where p is the number of plates. It tells, for each plate of the assay, the most likely spatial bias model (1 through 6)
 
-\code{biasConf} Vector of length p, where p is the number of plates. It tells, for each plate of the assay, the confidence in the model, (0 - lowest to 3-  highest).
+\code{biasConf} Vector of length p, where p is the number of plates. It tells, for each plate of the assay, the confidence in the model, (0 - lowest to 3-  highest). It is computed by counting the number of bias models (additive or mutliplicative) which agree together.
 }
 \description{
 \code{create_assay} makes a new object of class assay. You should pass this object to \code{detect_bias()} and \code{correct_bias()} methods

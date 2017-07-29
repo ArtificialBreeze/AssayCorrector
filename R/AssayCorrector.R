@@ -57,7 +57,7 @@ plot.assay<-function(x,...,plate=1,type="R"){
 #'
 #' \code{biasModel} Vector of length p, where p is the number of plates. It tells, for each plate of the assay, the most likely spatial bias model (1 through 6)
 #'
-#' \code{biasConf} Vector of length p, where p is the number of plates. It tells, for each plate of the assay, the confidence in the model, (0 - lowest to 3-  highest).
+#' \code{biasConf} Vector of length p, where p is the number of plates. It tells, for each plate of the assay, the confidence in the model, (0 - lowest to 3-  highest). It is computed by counting the number of bias models (additive or mutliplicative) which agree together.
 #' @examples
 #' # Fictive 8x12x5 assay
 #' assay<-create_assay(m)
@@ -199,7 +199,7 @@ detect_bias<-function(assay,alpha=0.01,type="P",test="AD"){
   return(assay)
 }
 #' @title Correct the bias present in the assay, previously detected by the \code{detect_bias()} method
-#' @description \code{correct_bias()} (1) uses either the additive or multiplicative PMP (Partial Mean Polish) methods (the most appropriate spatial bias model can be either specified or determined by the program following the results of the Kolmogorov-Smirnov two-sample test) to correct the assay measurements if the plate-specific correction is specified; (2) carries out the assay-specific correction if specified.
+#' @description \code{correct_bias()} (1) uses either of the three additive or either of the three multiplicative PMP (Partial Mean Polish) methods (the most appropriate spatial bias model can be either specified or determined by the program following the results of the Kolmogorov-Smirnov, Anderson-Darling or Cramer-von-Mises two-sample test) to correct the assay measurements if the plate-specific correction is specified; (2) carries out the assay-specific correction if specified.
 #' @param assay The assay to be corrected. Has to be an \code{assay} object.
 #' @param method \code{NULL}:autodetect (default), \code{1}:additive, \code{2}:multiplicative
 #' @param alpha Significance level threshold (defaults to 0.05)
