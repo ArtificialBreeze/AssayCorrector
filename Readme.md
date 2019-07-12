@@ -1,12 +1,12 @@
 # AssayCorrector
-[![Build Status](https://travis-ci.org/ArtificialBreeze/AssayCorrector.svg?branch=master)](https://travis-ci.org/ArtificialBreeze/AssayCorrector)
+[![Build Status](https://travis-ci.org/bmazoure/AssayCorrector.svg?branch=master)](https://travis-ci.org/bmazoure/AssayCorrector)
 ### Description
 This package uses partial mean polish and non-parametric statistical procedures to identify and correct spatial bias present in high-thoughput screening assays.
 ### Installation
 You can install the ```AssayCorrector``` package by typing
 ```{r }
 install.packages('devtools')
-devtools::install_github('ArtificialBreeze/AssayCorrector')
+devtools::install_github('bmazoure/AssayCorrector')
 ```
 ### Usage
 First, an ```assay``` object should be created by using 
