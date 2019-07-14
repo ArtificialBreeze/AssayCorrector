@@ -8,6 +8,10 @@ You can install the ```AssayCorrector``` package by typing
 install.packages('devtools')
 devtools::install_github('bmazoure/AssayCorrector')
 ```
+If there is an error with the package `mixOmics`, run the following and re-try:
+```{r }
+install.packages("https://cran.r-project.org/src/contrib/Archive/mixOmics/mixOmics_6.3.2.tar.gz", repos=NULL, type="source")
+```
 ### Usage
 First, an ```assay``` object should be created by using 
 ```{r }
